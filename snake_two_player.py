@@ -14,6 +14,9 @@ green = pygame.Color(0, 255, 0)
 blue = pygame.Color(0, 0, 255)
 yellow = pygame.Color(200, 200, 0)
 
+player1_color = green
+player2_color = yellow
+
 # Window size and title
 width = 800
 height = 600
@@ -24,11 +27,18 @@ pygame.display.set_caption("Snake IO")
 symbol_size = 13
 snake1_speed = 5
 snake2_speed = 5
+snake_length = 10
 
 snake1_position = [100, 50]
-snake1_body = [snake1_position, [snake1_position[0], snake1_position[1]+symbol_size], [snake1_position[0], snake1_position[1]+2*symbol_size]]
 snake2_position = [width-100, 50]
-snake2_body = [snake2_position, [snake2_position[0], snake2_position[1]+symbol_size], [snake2_position[0], snake2_position[1]+2*symbol_size]]
+
+snake1_body = []
+for l in range(0, snake_length):
+    snake1_body.insert(0, (snake1_position[0], snake1_position[1]+2*symbol_size))
+
+snake2_body = []
+for l in range(0, snake_length):
+    snake2_body.insert(0, (snake2_position[0], snake2_position[1]+2*symbol_size))
 
 # Food initial positions
 foods = []
@@ -38,14 +48,11 @@ for _ in range(food_count):
     food_position = [random.randrange(1, (width // symbol_size)) * symbol_size, random.randrange(1, (height // symbol_size)) * symbol_size]
     foods.append(food_position)
 
-# Score
-score1 = 0
-
 # Initial direction
 direction1 = 'RIGHT'
 snake1_direction = direction1
 
-direction2 = 'RIGHT'
+direction2 = 'LEFT'
 snake2_direction = direction2
 
 # Score
@@ -61,8 +68,8 @@ clock = pygame.time.Clock()
 # Function to display score on the screen
 def show_score():
     font = pygame.font.SysFont('consolas', 20)
-    score1_surface = font.render('Player 1 Score: ' + str(score1), True, white)
-    score2_surface = font.render('Player 2 Score: ' + str(score2), True, white)
+    score1_surface = font.render('Player 1 Score: ' + str(score1), True, player1_color)
+    score2_surface = font.render('Player 2 Score: ' + str(score2), True, player2_color)
     window.blit(score1_surface, (10, 10))
     window.blit(score2_surface, (width - score2_surface.get_width() - 10, 10))
 
@@ -153,13 +160,13 @@ while not game_over:
 
     # Snake 1 body
     for pos in snake1_body:
-        pygame.draw.rect(window, green, pygame.Rect(pos[0], pos[1], symbol_size, symbol_size))
+        pygame.draw.rect(window, player1_color, pygame.Rect(pos[0], pos[1], symbol_size, symbol_size))
 
     pygame.draw.rect(window, red, pygame.Rect(snake1_body[0][0], snake1_body[0][1], symbol_size, symbol_size))
 
     # Snake 2 body
     for pos in snake2_body:
-        pygame.draw.rect(window, yellow, pygame.Rect(pos[0], pos[1], symbol_size, symbol_size))
+        pygame.draw.rect(window, player2_color, pygame.Rect(pos[0], pos[1], symbol_size, symbol_size))
 
     pygame.draw.rect(window, red, pygame.Rect(snake2_body[0][0], snake2_body[0][1], symbol_size, symbol_size))
 
